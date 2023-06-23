@@ -25,7 +25,7 @@ if (!empty($_SESSION)) {
                         <a class="dropdown-item" href="shop.php">Shop</a>
                         <a class="dropdown-item" href="wishlist.php">Wishlist</a>
                         <a class="dropdown-item" href="product-single.html">Single Product</a>
-                        <a class="dropdown-item" href="cart.html">Cart</a>
+                        <a class="dropdown-item" href="cart.php">Cart</a>
                         <a class="dropdown-item" href="checkout.html">Checkout</a>
                     </div>
                 </li>
@@ -52,7 +52,7 @@ if (!empty($_SESSION)) {
 <script>
     let page = "<?php echo $page;?>";
     let idtarget = "";
-    if (page=="Wishlist") {
+    if (page=="Wishlist" || page=="Cart") {
         idtarget = document.getElementById("Shop");
         idtarget.className += " active";
     } else {
