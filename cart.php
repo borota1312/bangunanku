@@ -94,7 +94,8 @@ $page = "Cart";
 								$query = "SELECT * FROM cart INNER JOIN (products INNER JOIN product_images ON products.product_id = product_images.product_id) ON cart.product_id = products.product_id WHERE cart.user_id=$id";
 								$rs_result = mysqli_query($conn, $query);
 								$jumlahBarang = mysqli_num_rows($rs_result);
-								while ($row = mysqli_fetch_array($rs_result)) {
+								$barang = array();
+								while ($row = mysqli_fetch_assoc($rs_result)) {
 								?>
 									<tr class="text-center">
 										<td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
@@ -112,14 +113,16 @@ $page = "Cart";
 
 										<td class="quantity">
 											<div class="input-group mb-3">
-												<input onKeyup="Hitunghbarang()" value="<?php echo $row["quantity"] ?>" id="quantity<?php echo $row["product_id"] ?>" data-price="<?php echo $row["price"] ?>" type="text" name="quantity" class="quantity form-control input-number" min="1" max="100">
+												<input onkeyup="Hitunghbarang()" value="<?php echo $row["quantity"] ?>" data-id="<?php echo $row["product_id"] ?>" id="quantity<?php echo $row["product_id"] ?>" data-price="<?php echo $row["price"] ?>" type="text" name="quantity" class="quantity form-control input-number" min="1" max="100">
 											</div>
 										</td>
 
 										<td class="total" id="totalhpro<?php echo $row["product_id"] ?>"></td>
 									</tr><!-- END TR-->
 								<?php
+									$barang[] = array('id_barang' => $row['product_id']);
 								}
+								// print_r($barang);
 								?>
 							</tbody>
 						</table>
@@ -134,11 +137,11 @@ $page = "Cart";
 						<form action="#" class="info">
 							<div class="form-group">
 								<label for="">Coupon code</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
+								<input type="text" class="form-control text-left px-3" placeholder="" id="coupon_code">
 							</div>
 						</form>
 					</div>
-					<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
+					<p><a href="#" id="submitCoupon" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
 				</div>
 				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
@@ -170,19 +173,26 @@ $page = "Cart";
 						</p>
 						<p class="d-flex">
 							<span>Delivery</span>
-							<span>Rp. 10.000</span>
+							<span id="delivery"></span>
 						</p>
 						<p class="d-flex">
-							<span>Discount</span>
-							<span>Rp. 3.000</span>
+							<span id="htax"></span>
+							<span id="tax"></span>
+						</p>
+						<p class="d-flex">
+							<span id="hdiscount"></span>
+							<span id="discount"></span>
 						</p>
 						<hr>
 						<p class="d-flex total-price">
 							<span>Total</span>
-							<span>Rp. 167.000</span>
+							<span id="totalAll"></span>
 						</p>
 					</div>
-					<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+					<p>
+						<!-- <a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a> -->
+						<a href="#" id="checkout" class="btn btn-primary py-3 px-4">Proceed to Checkout</a>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -297,29 +307,121 @@ $page = "Cart";
 	<script src="js/google-map.js"></script>
 	<script src="js/main.js"></script>
 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 	<script>
-		function Hitunghbarang() {
-			let total = 0;
-			let subtotal = 0;
-			let total_items = "<?php echo $jumlahBarang; ?>";
-			let htotal = [];
-			for (i = 1; i <= total_items; i++) {
+		let delivery = 0;
+		let discount = 0;
+		let discountm = 0;
+		let tax = 10;
+		let taxm = 0;
+		let id_disc = 0;
+		let total_items = <?php echo json_encode($barang); ?>;
+		let htotal = [];
+		let data_barang = [];
+		let id_user = "<?php echo base64_encode($id); ?>";
+		let total_amount = 0;
 
-				itemID = document.getElementById("quantity" + i);
-				if (typeof itemID == 'undefined' || itemID == null) {
-					alert("No such item - " + "quantity" + i);
-				} else {
-					htotal[i] = total + parseInt(itemID.value) * parseInt(itemID.getAttribute("data-price"));
-					subtotal = subtotal + parseInt(itemID.value) * parseInt(itemID.getAttribute("data-price"));
-				}
-				document.getElementById("totalhpro" + i).innerHTML = formatRupiah(parseInt(htotal[i]), 'Rp ');
 
-			}
-			document.getElementById("subtotal").innerHTML = formatRupiah(parseInt(subtotal), 'Rp ');
-			console.log(htotal, subtotal)
-		}
+		$(document).ready(function() {
+			$(document).on("click", "#submitCoupon", function(e) {
+				e.preventDefault();
+				let code = $("#coupon_code").val();
+				$.ajax({
+					url: 'backend/get_coupon.php',
+					type: 'POST',
+					dataType: 'JSON',
+					data: {
+						kode: code,
+					},
+					success: function(data) {
+						discount = data.percent
+						id_disc = data.id
+						Hitunghbarang();
+					}
+				});
+			});
+
+			$(document).on("keyup", "input[name=quantity]", function(e) {
+				e.preventDefault();
+				let id = $(this).data('id');
+				let qty = $(this).val();
+				$.ajax({
+					url: 'backend/update_quantity.php',
+					type: 'POST',
+					dataType: 'JSON',
+					data: {
+						id: id,
+						id_user: id_user,
+						qty: qty
+					},
+					success: function(data) {
+						console.log(data)
+					}
+				});
+			});
+
+			// $(document).on("click", "#checkout", function(e) {
+			// 	e.preventDefault();
+			// 	for (i = 0; i < total_items.length; i++) {
+			// 		let idne = total_items[i]['id_barang'];
+			// 		itemID = document.getElementById("quantity" + idne);
+			// 		data_barang.push({
+			// 			id_barang: idne,
+			// 			quantity: itemID.value,
+			// 			price_per_unit: itemID.getAttribute("data-price")
+			// 		});
+			// 	}
+
+			// 	$.ajax({
+			// 		url: 'backend/get_coupon.php',
+			// 		type: 'POST',
+			// 		dataType: 'JSON',
+			// 		data: {
+			// 			barang: data_barang,
+			// 			id_user: id_user,
+			// 			total_amount: total_amount,
+			// 	coupon_id: id_disc,
+			// 	discount_amount: discount
+			// 		},
+			// 		success: function(data) {
+
+			// 		}
+			// 	});
+			// 	console.log(data_barang, id_disc, discount)
+			// });
+
+		});
 
 		Hitunghbarang();
+
+
+		function Hitunghbarang() {
+			let subtotal = 0;
+			let totalAll = 0;
+			for (i = 0; i < total_items.length; i++) {
+				let idne = total_items[i]['id_barang'];
+				itemID = document.getElementById("quantity" + idne);
+				if (typeof itemID == 'undefined' || itemID == null) {
+					alert("No such item - " + "quantity" + idne);
+				} else {
+					htotal[idne] = parseInt(itemID.value) * parseInt(itemID.getAttribute("data-price"));
+					subtotal = subtotal + parseInt(itemID.value) * parseInt(itemID.getAttribute("data-price"));
+				}
+				document.getElementById("totalhpro" + idne).innerHTML = formatRupiah(parseInt(htotal[idne]), 'Rp ');
+			}
+			discountm = discount / 100 * subtotal;
+			taxm = tax / 100 * subtotal;
+			document.getElementById("htax").innerHTML = "Tax (" + tax + "%)";
+			document.getElementById("hdiscount").innerHTML = "Discount (" + discount + "%)";
+			document.getElementById("tax").innerHTML = formatRupiah(parseInt(taxm), 'Rp ');
+			document.getElementById("discount").innerHTML = formatRupiah(parseInt(discountm), 'Rp ');
+			document.getElementById("subtotal").innerHTML = formatRupiah(parseInt(subtotal), 'Rp ');
+			totalAll = subtotal + taxm + delivery - discountm;
+			total_amount = totalAll;
+			document.getElementById("totalAll").innerHTML = formatRupiah(parseInt(totalAll), 'Rp ');
+			document.getElementById("delivery").innerHTML = formatRupiah(parseInt(delivery), 'Rp ');
+
+		}
 
 		function formatRupiah(angka, prefix) {
 			var number_string = angka.toString().replace(/[^,\d]/g, ''),
