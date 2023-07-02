@@ -65,9 +65,11 @@
       if ($password == $row["password"]) {
         $_SESSION["login"] = true;
         $_SESSION["id"] = $row["user_id"];
-        echo "<script> window.location.href = 'index.php'; </script>";
-
-        // header("Location: index.php");
+        if ($row['username'] == 'admin' && $row['password'] == base64_encode('admin')) {
+          echo "<script> window.location.href = 'admin/index.php'; </script>";
+        } else {
+          echo "<script> window.location.href = 'index.php'; </script>";
+        }
       } else {
         echo "<script> Swal.fire('Perhatian','Password Salah','warning') </script>";
       }
