@@ -9,7 +9,7 @@ $page = "Cart";
 <html lang="en">
 
 <head>
-	<title>Banngunanku - Build your building.</title>
+	<title>Bangunanku - Build your building.</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -95,32 +95,41 @@ $page = "Cart";
 								$rs_result = mysqli_query($conn, $query);
 								$jumlahBarang = mysqli_num_rows($rs_result);
 								$barang = array();
-								while ($row = mysqli_fetch_assoc($rs_result)) {
+								if ($jumlahBarang == 0) {
+									echo '<tr class="text-center">
+									<td colspan="6">
+									Belum ada Produk di Kerajang anda</td></tr>';
+								} else {
+									while ($row = mysqli_fetch_assoc($rs_result)) {
 								?>
-									<tr class="text-center">
-										<td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+										<tr class="text-center">
+											<td class="product-remove"><a href="#" id="deleteCart" data-id="<?php echo $row['product_id']; ?>"><span class="ion-ios-close"></span></a></td>
 
-										<td class="image-prod">
-											<div class="img" style="background-image:url(<?php echo $row['image_url']; ?>);"></div>
-										</td>
+											<td class="image-prod">
+												<div class="img" style="background-image:url(<?php echo $row['image_url']; ?>);"></div>
+											</td>
 
-										<td class="product-name">
-											<h3><?php echo $row['product_name']; ?></h3>
-											<p><?php echo $row['description']; ?></p>
-										</td>
+											<td class="product-name">
+												<h3><?php echo $row['product_name']; ?></h3>
+												<p><?php echo $row['description']; ?></p>
+											</td>
 
-										<td class="price"><?php echo rupiah($row["price"]) ?></td>
+											<td class="price"><?php echo rupiah($row["price"]) ?></td>
 
-										<td class="quantity">
-											<div class="input-group mb-3">
-												<input onkeyup="Hitunghbarang()" value="<?php echo $row["quantity"] ?>" data-id="<?php echo $row["product_id"] ?>" id="quantity<?php echo $row["product_id"] ?>" data-price="<?php echo $row["price"] ?>" type="text" name="quantity" class="quantity form-control input-number" min="1" max="100">
-											</div>
-										</td>
+											<td class="quantity">
+												<div class="input-group mb-3">
+													<input onkeyup="Hitunghbarang()" value="<?php echo $row["quantity"] ?>" data-id="<?php echo $row["product_id"] ?>" id="quantity<?php echo $row["product_id"] ?>" data-price="<?php echo $row["price"] ?>" type="text" name="quantity" class="quantity form-control input-number" min="1" max="100">
+												</div>
+											</td>
 
-										<td class="total" id="totalhpro<?php echo $row["product_id"] ?>"></td>
-									</tr><!-- END TR-->
+											<td class="total" id="totalhpro<?php echo $row["product_id"] ?>"></td>
+										</tr><!-- END TR-->
 								<?php
-									$barang[] = array('id_barang' => $row['product_id']);
+										$barang[] = array(
+											'id_barang' => $row['product_id'],
+											'quantity' => $row['quantity']
+										);
+									}
 								}
 								// print_r($barang);
 								?>
@@ -130,7 +139,7 @@ $page = "Cart";
 				</div>
 			</div>
 			<div class="row justify-content-end">
-				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+				<div class="col-lg-6 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
 						<h3>Coupon Code</h3>
 						<p>Enter your coupon code if you have one</p>
@@ -143,28 +152,7 @@ $page = "Cart";
 					</div>
 					<p><a href="#" id="submitCoupon" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
 				</div>
-				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-					<div class="cart-total mb-3">
-						<h3>Estimate shipping and tax</h3>
-						<p>Enter your destination to get a shipping estimate</p>
-						<form action="#" class="info">
-							<div class="form-group">
-								<label for="">Country</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-							<div class="form-group">
-								<label for="country">State/Province</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-							<div class="form-group">
-								<label for="country">Zip/Postal Code</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-						</form>
-					</div>
-					<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
-				</div>
-				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+				<div class="col-lg-6 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
 						<h3>Cart Totals</h3>
 						<p class="d-flex">
@@ -320,6 +308,7 @@ $page = "Cart";
 		let data_barang = [];
 		let id_user = "<?php echo base64_encode($id); ?>";
 		let total_amount = 0;
+		let sub_amount = 0;
 
 
 		$(document).ready(function() {
@@ -354,46 +343,66 @@ $page = "Cart";
 						id_user: id_user,
 						qty: qty
 					},
-					success: function(data) {
-						console.log(data)
-					}
+					success: function(data) {}
 				});
 			});
 
-			// $(document).on("click", "#checkout", function(e) {
-			// 	e.preventDefault();
-			// 	for (i = 0; i < total_items.length; i++) {
-			// 		let idne = total_items[i]['id_barang'];
-			// 		itemID = document.getElementById("quantity" + idne);
-			// 		data_barang.push({
-			// 			id_barang: idne,
-			// 			quantity: itemID.value,
-			// 			price_per_unit: itemID.getAttribute("data-price")
-			// 		});
-			// 	}
+			$(document).on("click", "#deleteCart", function(e) {
+				e.preventDefault();
+				let id = $(this).data('id');
+				// console.log(id)
+				$.ajax({
+					url: "backend/delete_cart.php",
+					type: "POST",
+					dataType: 'JSON',
+					data: {
+						iddelete: id,
+						id_user: id_user
+					},
+					success: function(data) {
+						alert(data)
+						window.location.href = "cart.php";
+					},
+				});
+				location.reload();
+			});
 
-			// 	$.ajax({
-			// 		url: 'backend/get_coupon.php',
-			// 		type: 'POST',
-			// 		dataType: 'JSON',
-			// 		data: {
-			// 			barang: data_barang,
-			// 			id_user: id_user,
-			// 			total_amount: total_amount,
-			// 	coupon_id: id_disc,
-			// 	discount_amount: discount
-			// 		},
-			// 		success: function(data) {
-
-			// 		}
-			// 	});
-			// 	console.log(data_barang, id_disc, discount)
-			// });
+			$(document).on("click", "#checkout", function(e) {
+				e.preventDefault();
+				data_barang = [];
+				for (i = 0; i < total_items.length; i++) {
+					let idne = total_items[i]['id_barang'];
+					itemID = document.getElementById("quantity" + idne);
+					data_barang.push({
+						id_barang: idne,
+						quantity: itemID.value,
+						price_per_unit: itemID.getAttribute('data-price'),
+					});
+				}
+				$.ajax({
+					url: "backend/data_from_cart.php",
+					type: "POST",
+					dataType: 'JSON',
+					data: {
+						total_amount: total_amount,
+						id_user: id_user,
+						data_barang: data_barang,
+						id_disc: id_disc,
+						discount: discount,
+						subtotal: sub_amount,
+						delivery: delivery,
+						tax: tax
+					},
+					success: function(data) {
+						console.log(data)
+					},
+				});
+				window.location.href = "checkout.php";
+			});
 
 		});
 
 		Hitunghbarang();
-
 
 		function Hitunghbarang() {
 			let subtotal = 0;
@@ -418,25 +427,10 @@ $page = "Cart";
 			document.getElementById("subtotal").innerHTML = formatRupiah(parseInt(subtotal), 'Rp ');
 			totalAll = subtotal + taxm + delivery - discountm;
 			total_amount = totalAll;
+			sub_amount = subtotal;
 			document.getElementById("totalAll").innerHTML = formatRupiah(parseInt(totalAll), 'Rp ');
 			document.getElementById("delivery").innerHTML = formatRupiah(parseInt(delivery), 'Rp ');
 
-		}
-
-		function formatRupiah(angka, prefix) {
-			var number_string = angka.toString().replace(/[^,\d]/g, ''),
-				split = number_string.split(','),
-				sisa = split[0].length % 3,
-				rupiah = split[0].substr(0, sisa),
-				ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-			if (ribuan) {
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
-
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
 		}
 	</script>
 

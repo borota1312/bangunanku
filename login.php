@@ -65,7 +65,8 @@
       if ($password == $row["password"]) {
         $_SESSION["login"] = true;
         $_SESSION["id"] = $row["user_id"];
-        if ($row['username'] == 'admin' && $row['password'] == base64_encode('admin')) {
+        $_SESSION["email"] = $row["email"];
+        if ($row["username"] == "admin" && $row["password"] == base64_encode("admin")) {
           echo "<script> window.location.href = 'admin/index.php'; </script>";
         } else {
           echo "<script> window.location.href = 'index.php'; </script>";
