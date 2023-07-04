@@ -357,34 +357,35 @@ $page = "Checkout";
                     $("#metode_check").show();
                 } else if (!$("input[name=agree]").prop("checked")) {
                     $("#agree_check").show();
+                } else {
+                    $.ajax({
+                        url: 'backend/insert_order.php',
+                        type: 'POST',
+                        // dataType: 'JSON',
+                        data: {
+                            id_user: id_user,
+                            order_date: order_date,
+                            total_amount: total_amount,
+                            id_disc: id_disc,
+                            alamat_lengkap: alamat_lengkap,
+                            option: option,
+                            tax: tax,
+                            data_barang: data_barang,
+                            discount: discount,
+                        },
+                        success: function(data) {
+                            Swal.fire(
+                                'Berhasil',
+                                data,
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "cart.php";
+                                }
+                            })
+                        }
+                    });
                 }
-                $.ajax({
-                    url: 'backend/insert_order.php',
-                    type: 'POST',
-                    // dataType: 'JSON',
-                    data: {
-                        id_user: id_user,
-                        order_date: order_date,
-                        total_amount: total_amount,
-                        id_disc: id_disc,
-                        alamat_lengkap: alamat_lengkap,
-                        option: option,
-                        tax: tax,
-                        data_barang: data_barang,
-                        discount: discount,
-                    },
-                    success: function(data) {
-                        Swal.fire(
-                            'Berhasil',
-                            data,
-                            'success'
-                        ).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = "cart.php";
-                            }
-                        })
-                    }
-                });
             });
         });
     </script>

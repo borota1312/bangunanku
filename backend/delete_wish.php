@@ -8,12 +8,12 @@ $hasil = mysqli_query($conn, $gq);
 $baris = mysqli_fetch_assoc($hasil);
 $nama_barang = $baris["product_name"];
 
-$gq = "SELECT * FROM cart WHERE product_id='$delete' AND user_id='$idUser'";
+$gq = "SELECT * FROM wishlist WHERE product_id='$delete' AND user_id='$idUser'";
 $hasil = mysqli_query($conn, $gq);
 $baris = mysqli_fetch_assoc($hasil);
-$id_delete = $baris["cart_id"];
+$id_delete = $baris["wishlist_id"];
 
-$que = "DELETE FROM cart WHERE cart_id=$id_delete";
+$que = "DELETE FROM wishlist WHERE wishlist_id=$id_delete";
 $res = mysqli_query($conn, $que);
 
-echo $nama_barang . " berhasil dihapus dari keranjang anda.";
+echo $nama_barang . " berhasil dihapus dari wishlist anda.";

@@ -354,17 +354,22 @@ $page = "Cart";
 				$.ajax({
 					url: "backend/delete_cart.php",
 					type: "POST",
-					dataType: 'JSON',
 					data: {
 						iddelete: id,
 						id_user: id_user
 					},
 					success: function(data) {
-						alert(data)
-						window.location.href = "cart.php";
+						Swal.fire(
+							'Berhasil',
+							data,
+							'success'
+						).then((result) => {
+							if (result.isConfirmed) {
+								location.reload();
+							}
+						})
 					},
 				});
-				location.reload();
 			});
 
 			$(document).on("click", "#checkout", function(e) {
