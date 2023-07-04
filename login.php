@@ -55,7 +55,7 @@
   </div>
   <?php
   include 'navbar.php';
-  require 'config.php';
+  // require 'config.php';
   if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $password = base64_encode($_POST["password"]);

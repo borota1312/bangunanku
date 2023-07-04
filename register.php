@@ -56,7 +56,7 @@
   </div>
   <?php
   include 'navbar.php';
-  require 'config.php';
+  // require 'config.php';
   if (isset($_POST["submit"])) {
     $name = $_POST["name"];
     $email = $_POST["email"];

@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+// require 'config.php';
 if (!empty($_SESSION)) {
     $session_login = $_SESSION['login'];
     if ($session_login == true) {

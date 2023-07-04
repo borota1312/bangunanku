@@ -14,3 +14,5 @@ $_SESSION["cart"]["delivery"] = $delivery;
 $_SESSION["cart"]["tax"] = $tax;
 $_SESSION["cart"]["id_disc"] = $id_disc;
 $_SESSION["cart"]["discount"] = $discount;
+
+echo json_encode($_SESSION);

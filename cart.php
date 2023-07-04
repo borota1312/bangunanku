@@ -394,10 +394,9 @@ $page = "Cart";
 						tax: tax
 					},
 					success: function(data) {
-						console.log(data)
+						window.location.href = "checkout.php";
 					},
 				});
-				window.location.href = "checkout.php";
 			});
 
 		});
