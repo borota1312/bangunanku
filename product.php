@@ -33,7 +33,7 @@ if ($page == "Shop") {
             ?>
                 <div class="col-md-6 col-lg-3 ftco-animate">
                     <div class="product">
-                        <a href="#" class="img-prod"><img class="img-fluid" src="<?php echo $row["image_url"] ?>" alt="Colorlib Template">
+                        <a href="#" class="img-prod"><img class="img-fluid" src="admin/backend/<?php echo $row["image_url"] ?>" alt="Colorlib Template">
                             <div class="overlay"></div>
                         </a><br>
                         <div class="text py-3 pb-4 px-3 text-center">
