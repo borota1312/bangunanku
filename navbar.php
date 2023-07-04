@@ -43,9 +43,15 @@ function rupiah($angka)
                 </li>
 
                 <?php
-                if ($_SESSION['login'] == true) {
+                if (isset($_SESSION['login'])) {
                 ?>
                     <li class="nav-item"><a href="logout.php" class="nav-link">Logout</a></li>
+                    <?php
+                    if ($_SESSION['username'] == 'admin') {
+                    ?>
+                        <li class="nav-item"><a href="admin/index.php" class="nav-link">Dashboard</a></li>
+                    <?php
+                    } ?>
                 <?php
                 } else {
                 ?>

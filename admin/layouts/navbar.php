@@ -26,8 +26,8 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <span class="fw-semibold d-block">admin</span>
-                                    <small class="text-muted">admin</small>
+                                    <span class="fw-semibold d-block"><?= $_SESSION['username']; ?></span>
+                                    <small class="text-muted"><?= $_SESSION['username']; ?></small>
                                 </div>
                             </div>
                         </a>

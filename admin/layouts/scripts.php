@@ -19,3 +19,11 @@
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Session -->
+<?php if (@$_SESSION['sukses']) { ?>
+    <script>
+        Swal.fire('Berhasil', "<?php echo $_SESSION['sukses']; ?>", 'success')
+    </script>
+    <!-- jangan lupa untuk menambahkan unset agar sweet alert tidak muncul lagi saat di refresh -->
+<?php unset($_SESSION['sukses']);
+} ?>
