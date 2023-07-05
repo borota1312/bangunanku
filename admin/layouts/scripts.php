@@ -24,6 +24,13 @@
     <script>
         Swal.fire('Berhasil', "<?php echo $_SESSION['sukses']; ?>", 'success')
     </script>
-    <!-- jangan lupa untuk menambahkan unset agar sweet alert tidak muncul lagi saat di refresh -->
-<?php unset($_SESSION['sukses']);
+<?php
+    unset($_SESSION['sukses']);
+} else {
+?>
+    <script>
+        Swal.fire('Gagal', "<?php echo $_SESSION['error']; ?>", 'error')
+    </script>
+<?php
+    unset($_SESSION['error']);
 } ?>

@@ -116,6 +116,37 @@ function rupiah($angka)
             }
         });
 
+        $(document).on("click", "#wishAddCart", function(e) {
+            e.preventDefault();
+            if (iduser == checkNull) {
+                window.location.href = "login.php";
+            } else {
+                let id = $(this).data('id');
+                // console.log(id)
+                $.ajax({
+                    url: 'backend/wish_cart_insert.php',
+                    type: 'POST',
+                    data: {
+                        id_user: iduser,
+                        cart_id: id
+                    },
+                    success: function(data) {
+                        lodetable();
+                        Swal.fire(
+                            'Berhasil',
+                            data,
+                            'success'
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                        // alert(data);
+                    }
+                });
+            }
+        });
+
         $(document).on("click", "#addWish", function(e) {
             e.preventDefault();
             if (iduser == checkNull) {

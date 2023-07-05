@@ -71,11 +71,6 @@ $current = "tambah";
     </div>
 
     <?php include('layouts/scripts.php') ?>
-    <script>
-        $(document).ready(function() {
-            $('#our-products').DataTable();
-        });
-    </script>
 </body>
 
 </html>
