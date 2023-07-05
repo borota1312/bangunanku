@@ -4,6 +4,9 @@ if (!empty($_SESSION)) {
     $session_login = $_SESSION['login'];
     if ($session_login == true) {
         $id = $_SESSION["id"];
+    } else {
+        header('Location: index.php');
+        exit();
     }
 } else {
     $id = 'null';

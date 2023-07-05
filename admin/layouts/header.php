@@ -3,11 +3,16 @@
 require '../config.php';
 if (!empty($_SESSION)) {
     $session_login = $_SESSION['login'];
-    if ($session_login == true) {
+    if ($session_login == true && $_SESSION['username'] == 'admin') {
         $id = $_SESSION["id"];
+    } else {
+        header('Location: ../index.php');
+        exit();
     }
 } else {
     $id = 'null';
+    header('Location: ../index.php');
+    exit();
 } ?>
 ?>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="assets/" data-template="vertical-menu-template-free">
