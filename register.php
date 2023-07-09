@@ -72,7 +72,12 @@
           $query = "INSERT INTO users (username,password,email) VALUES('$name','$pass','$email')";
           mysqli_query($conn, $query);
           echo
-          "<script> Swal.fire('Berhasil','Registrasi Berhasil','success') </script>";
+          "<script> Swal.fire('Berhasil','Registrasi Berhasil','success')
+          .then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = 'login.php';
+                                }
+                            }) </script>";
         } catch (mysqli_sql_exception $e) {
           var_dump($e);
           exit;
