@@ -490,15 +490,21 @@
 
   // Income Chart - Area chart
   // --------------------------------------------------------------------
+  console.log(data)
+  var total_amount = [];
+
+  for (var i in data) {
+    total_amount.push(data[i].num_rows);
+  }
   const incomeChartEl = document.querySelector('#incomeChart'),
     incomeChartConfig = {
       series: [
         {
-          data: [24, 21, 30, 22, 42, 26, 35, 29]
+          data: total_amount
         }
       ],
       chart: {
-        height: 215,
+        height: 400,
         parentHeightOffset: 0,
         parentWidthOffset: 0,
         toolbar: {
@@ -558,7 +564,7 @@
         }
       },
       xaxis: {
-        categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des'],
         axisBorder: {
           show: false
         },

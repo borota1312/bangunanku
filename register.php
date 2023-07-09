@@ -1,4 +1,6 @@
-<?php $page = "Create"; ?>
+<?php
+require 'config.php';
+$page = "Create"; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +58,6 @@
   </div>
   <?php
   include 'navbar.php';
-  // require 'config.php';
   if (isset($_POST["submit"])) {
     $name = $_POST["name"];
     $email = $_POST["email"];
