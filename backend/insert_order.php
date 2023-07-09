@@ -38,6 +38,14 @@ foreach ($data_barang as $item) {
 
     $que = "DELETE FROM cart WHERE product_id=$product_id AND user_id=$id_user";
     $res = mysqli_query($conn, $que);
+
+    $query = "SELECT * FROM products WHERE product_id=$product_id";
+    $result = mysqli_query($conn, $query);
+    $baris = mysqli_fetch_assoc($result);
+    $quantity_from = $baris['stock_quantity'];
+    $quantity_final = $quantity_from - $quantity;
+    $que = "UPDATE products SET stock_quantity = $quantity_final WHERE product_id=$product_id";
+    $res = mysqli_query($conn, $que);
 }
 $_SESSION["cart"] = [];
 $alert = "Anda berhasil melakukan pemesanan.";

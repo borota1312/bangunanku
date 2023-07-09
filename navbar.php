@@ -1,5 +1,5 @@
 <?php
-// require 'config.php';
+require 'config.php';
 if (!empty($_SESSION)) {
     $session_login = $_SESSION['login'];
     if ($session_login == true) {
@@ -173,7 +173,7 @@ function rupiah($angka)
         });
         let page = "<?php echo $page; ?>";
         let idtarget = "";
-        if (page == "Wishlist" || page == "Cart" || page == "Shop") {
+        if (page == "Wishlist" || page == "Cart" || page == "Shop" || page == "Product Single") {
             idtarget = document.getElementById("Shop");
             idtarget.className += " active";
         } else {
