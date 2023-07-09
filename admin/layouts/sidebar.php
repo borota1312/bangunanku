@@ -29,8 +29,18 @@
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
         </li>
-
-
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Cupons</span>
+        </li>
+        <li class="menu-item <?php echo ($page == "coupons" ? "active" : "") ?>">
+            <a href="cupons.php" class="menu-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag" viewBox="0 0 16 16">
+                    <path d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0z" />
+                    <path d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1zm0 5.586 7 7L13.586 9l-7-7H2v4.586z" />
+                </svg>
+                <div data-i18n="Analytics"> Coupons</div>
+            </a>
+        </li>
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Product</span>
         </li>
@@ -46,64 +56,6 @@
             <a href="products.php" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-closet"></i>
                 <div data-i18n="Analytics">Our Products</div>
-            </a>
-        </li>
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Account</span>
-        </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Account Settings">Account Settings</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="pages-account-settings-account.html" class="menu-link">
-                        <div data-i18n="Account">Account</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-account-settings-notifications.html" class="menu-link">
-                        <div data-i18n="Notifications">Notifications</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-account-settings-connections.html" class="menu-link">
-                        <div data-i18n="Connections">Connections</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
-                <div data-i18n="Authentications">Authentications</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="auth-login-basic.html" class="menu-link" target="_blank">
-                        <div data-i18n="Basic">Login</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="auth-register-basic.html" class="menu-link" target="_blank">
-                        <div data-i18n="Basic">Register</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
-                        <div data-i18n="Basic">Forgot Password</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Misc -->
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Misc</span></li>
-        <li class="menu-item">
-            <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues" target="_blank" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-support"></i>
-                <div data-i18n="Support">Support</div>
             </a>
         </li>
     </ul>
