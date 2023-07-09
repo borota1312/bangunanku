@@ -7,10 +7,27 @@ if ($page == "Shop") {
             <div class="row justify-content-center">
                 <div class="col-md-10 mb-5 text-center">
                     <ul class="product-category">
-                        <li><a href="#" class="active">All</a></li>
-                        <li><a href="#">Alat</a></li>
-                        <li><a href="#">Bahan Bangunan</a></li>
-                        <li><a href="#">Cat</a></li>
+                        <?php
+                        if (isset($_GET['kategori'])) {
+                            echo "<li><a href='shop.php'>All</a></li>";
+                        } else {
+                            echo "<li><a href='shop.php' class='active'>All</a></li>";
+                        }
+
+                        $queryc = "SELECT * FROM categories";
+                        $rs_resultc = mysqli_query($conn, $queryc);
+                        // echo $queryc;
+                        while ($rowc = mysqli_fetch_array($rs_resultc)) {
+                            if (base64_decode($_GET['kategori']) == $rowc["category_id"]) {
+                                echo "<li><a class='active' href='shop.php?kategori=" . base64_encode($rowc["category_id"]) . "'>" . $rowc["category_name"] . "</a></li>";
+                            } else {
+                                echo "<li><a href='shop.php?kategori=" . base64_encode($rowc["category_id"]) . "'>" . $rowc["category_name"] . "</a></li>";
+                            }
+                        }
+
+                        ?>
+
+
                     </ul>
                 </div>
             </div>
@@ -20,6 +37,13 @@ if ($page == "Shop") {
         <div class="row">
             <?php
             $per_page_record = 12;
+            $query = "SELECT * FROM products INNER JOIN product_images ON products.product_id=product_images.product_id";
+
+            if (isset($_GET["kategori"])) {
+                $kategori = base64_decode($_GET["kategori"]);
+                $query = "$query AND category_id=$kategori";
+            }
+
             if (isset($_GET["page"])) {
                 $halaman = $_GET["page"];
             } else {
@@ -27,7 +51,8 @@ if ($page == "Shop") {
             }
 
             $start_from = ($halaman - 1) * $per_page_record;
-            $query = "SELECT * FROM products INNER JOIN product_images ON products.product_id=product_images.product_id LIMIT $start_from, $per_page_record";
+            $query = "$query LIMIT $start_from, $per_page_record";
+
             $rs_result = mysqli_query($conn, $query);
             while ($row = mysqli_fetch_array($rs_result)) {
             ?>
@@ -67,7 +92,12 @@ if ($page == "Shop") {
         </div>
         <?php
         if ($page == "Shop") {
-            $query = "SELECT COUNT(*) FROM products";
+            if (isset($_GET["kategori"])) {
+                $query = "SELECT COUNT(*) FROM products WHERE category_id=$kategori";
+            } else {
+                $query = "SELECT COUNT(*) FROM products";
+            }
+
             $rs_result = mysqli_query($conn, $query);
             $row = mysqli_fetch_row($rs_result);
             $total_records = $row[0];
@@ -79,20 +109,38 @@ if ($page == "Shop") {
                     <div class="block-27">
                         <ul>
                             <?php
-                            if ($halaman >= 2) {
-                                echo "<li><a href='shop.php?page=" . ($halaman - 1) . "'>&lt;</a></li>";
-                            }
-                            for ($i = 1; $i <= $total_pages; $i++) {
-                                if ($i == $halaman) {
-                                    $pageLink .= "<li class='active'><span>" . $i . "</span></li>";
-                                } else {
-                                    $pageLink .= "<li><a href='shop.php?page=" . $i . "'>" . $i . "</a></li>";
+                            if (isset($_GET["kategori"])) {
+                                if ($halaman >= 2) {
+                                    echo "<li><a href='shop.php?kategori=" . $_GET["kategori"] . "&page=" . ($halaman - 1) . "'>&lt;</a></li>";
+                                }
+                                for ($i = 1; $i <= $total_pages; $i++) {
+                                    if ($i == $halaman) {
+                                        $pageLink .= "<li class='active'><span>" . $i . "</span></li>";
+                                    } else {
+                                        $pageLink .= "<li><a href='shop.php?kategori=" . $_GET["kategori"] . "&page=" . $i . "'>" . $i . "</a></li>";
+                                    }
+                                }
+                                echo $pageLink;
+                                if ($halaman < $total_pages) {
+                                    echo "<li><a href='shop.php?kategori=" . $_GET["kategori"] . "&page=" . ($halaman + 1) . "'>&gt;</a></li>";
+                                }
+                            } else {
+                                if ($halaman >= 2) {
+                                    echo "<li><a href='shop.php?page=" . ($halaman - 1) . "'>&lt;</a></li>";
+                                }
+                                for ($i = 1; $i <= $total_pages; $i++) {
+                                    if ($i == $halaman) {
+                                        $pageLink .= "<li class='active'><span>" . $i . "</span></li>";
+                                    } else {
+                                        $pageLink .= "<li><a href='shop.php?page=" . $i . "'>" . $i . "</a></li>";
+                                    }
+                                }
+                                echo $pageLink;
+                                if ($halaman < $total_pages) {
+                                    echo "<li><a href='shop.php?page=" . ($halaman + 1) . "'>&gt;</a></li>";
                                 }
                             }
-                            echo $pageLink;
-                            if ($halaman < $total_pages) {
-                                echo "<li><a href='shop.php?page=" . ($halaman + 1) . "'>&gt;</a></li>";
-                            }
+
                             ?>
                         </ul>
                     </div>

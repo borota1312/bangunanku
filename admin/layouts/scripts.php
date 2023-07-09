@@ -26,7 +26,7 @@
     </script>
 <?php
     unset($_SESSION['sukses']);
-} else {
+} else if (@$_SESSION['error']) {
 ?>
     <script>
         Swal.fire('Gagal', "<?php echo $_SESSION['error']; ?>", 'error')
