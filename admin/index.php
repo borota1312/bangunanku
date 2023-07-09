@@ -46,6 +46,14 @@
                             </div>
                         </div>
                         <div class="card">
+                            <?php
+                            $query = "SELECT total_amount FROM `order_history` ";
+                            $rs_result = mysqli_query($conn, $query);
+                            $total_amount = 0;
+                            while ($row = mysqli_fetch_array($rs_result)) {
+                                $total_amount += $row['total_amount'];
+                            }
+                            ?>
                             <div class="card-body px-0">
                                 <div class="tab-content p-0">
                                     <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel">
@@ -54,13 +62,10 @@
                                                 <img src="assets/img/icons/unicons/wallet.png" alt="User" />
                                             </div>
                                             <div>
-                                                <small class="text-muted d-block">Total Pemasukan</small>
+                                                <small class="text-muted d-block">Total Pendapatan</small>
                                                 <div class="d-flex align-items-center">
-                                                    <h6 class="mb-0 me-1">Rp. 68.570.000</h6>
-                                                    <small class="text-success fw-semibold">
-                                                        <i class="bx bx-chevron-up"></i>
-                                                        42.9%
-                                                    </small>
+                                                    <h6 class="mb-0 me-1">Rp. <?= number_format($total_amount, 0, ',', '.') ?></h6>
+
                                                 </div>
                                             </div>
                                         </div>

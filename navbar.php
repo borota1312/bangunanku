@@ -32,12 +32,12 @@ function rupiah($angka)
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
                         <a class="dropdown-item" href="shop.php">Shop</a>
                         <a class="dropdown-item" href="wishlist.php">Wishlist</a>
-                        <a class="dropdown-item" href="product-single.html">Single Product</a>
+                        <a class="dropdown-item" href="product-single.php">Single Product</a>
                         <a class="dropdown-item" href="cart.php">Cart</a>
-                        <a class="dropdown-item" href="checkout.html">Checkout</a>
+                        <a class="dropdown-item" href="checkout.php">Checkout</a>
                     </div>
                 </li>
-                <li id="About" class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li id="About" class="nav-item"><a href="about.php" class="nav-link">About</a></li>
                 <li id="Cart" class="nav-item cta cta-colored">
                     <a href="cart.php" class="nav-link">
                         <span class="icon-shopping_cart"></span>
