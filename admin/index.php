@@ -14,7 +14,9 @@
             <div class="layout-page">
                 <!-- Navbar -->
 
-                <?php include('layouts/navbar.php') ?>
+                <?php
+                // include('layouts/navbar.php') 
+                ?>
                 <!-- / Navbar -->
 
                 <!-- Content wrapper -->
@@ -88,22 +90,15 @@
         </div>
         <?php
         $bulan = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $datas = array();
         foreach ($bulan as $k) {
-            $query = "SELECT * FROM `order_history` WHERE MONTH(`order_date`) = $k";
-            $result[] = mysqli_query($conn, $query);
+            $query = "SELECT * FROM `order_history` WHERE MONTH(order_date) = $k";
+            $result = mysqli_query($conn, $query);
+            $datas[] = mysqli_num_rows($result);
         }
-        // var_dump(($result));
-
-        // $data = array();
-        // foreach ($result as $row) {
-        //     $data[] = $row;
-        // }
-        // var_dump($result[6]);
-        // $datas = ;
-        // echo ;
         ?>
         <script>
-            var data = <?= json_encode($result) ?>
+            var data = <?= json_encode($datas) ?>
         </script>
         <?php include('layouts/scripts.php') ?>
 </body>

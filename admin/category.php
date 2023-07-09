@@ -17,7 +17,9 @@ $page = "category";
             <div class="layout-page">
                 <!-- Navbar -->
 
-                <?php include('layouts/navbar.php') ?>
+                <?php
+                // include('layouts/navbar.php') 
+                ?>
                 <!-- / Navbar -->
 
                 <!-- Content wrapper -->

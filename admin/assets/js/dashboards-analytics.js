@@ -490,21 +490,16 @@
 
   // Income Chart - Area chart
   // --------------------------------------------------------------------
-  console.log(data)
-  var total_amount = [];
 
-  for (var i in data) {
-    total_amount.push(data[i].num_rows);
-  }
   const incomeChartEl = document.querySelector('#incomeChart'),
     incomeChartConfig = {
       series: [
         {
-          data: total_amount
+          data: data
         }
       ],
       chart: {
-        height: 400,
+        height: 250,
         parentHeightOffset: 0,
         parentWidthOffset: 0,
         toolbar: {
@@ -539,7 +534,7 @@
           }
         ],
         hover: {
-          size: 7
+          size: 6
         }
       },
       colors: [config.colors.primary],
@@ -583,7 +578,7 @@
         labels: {
           show: false
         },
-        min: 10,
+        min: 0,
         max: 50,
         tickAmount: 4
       }
