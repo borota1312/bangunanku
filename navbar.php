@@ -32,7 +32,7 @@ function rupiah($angka)
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
                         <a class="dropdown-item" href="shop.php">Shop</a>
                         <a class="dropdown-item" href="wishlist.php">Wishlist</a>
-                        <a class="dropdown-item" href="product-single.php">Single Product</a>
+                        <!-- <a class="dropdown-item" href="product-single.php">Single Product</a> -->
                         <a class="dropdown-item" href="cart.php">Cart</a>
                         <a class="dropdown-item" href="checkout.php">Checkout</a>
                     </div>

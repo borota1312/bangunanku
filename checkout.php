@@ -58,8 +58,9 @@ $page = "Checkout";
     </div>
     <?php
     include 'navbar.php';
-
-    $data_barang = json_encode($_SESSION["cart"]['data_barang']);
+    if (isset($_SESSION["cart"]['data_barang'])) {
+        $data_barang = json_encode($_SESSION["cart"]['data_barang']);
+    }
 
     date_default_timezone_set('Asia/Jakarta');
     $now = date('Y-m-d H:i:s');

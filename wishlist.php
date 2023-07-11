@@ -128,7 +128,7 @@ $page = "Wishlist";
 								<?php
 										$barang[] = array(
 											'id_barang' => $row['product_id'],
-											'quantity' => $row['quantity']
+											'quantity' => isset($row['quantity']) ? $row['quantity'] : 0
 										);
 									}
 								}

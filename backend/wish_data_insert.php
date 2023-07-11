@@ -3,7 +3,7 @@ require '../config.php';
 $wishId = $_POST['wish_id'];
 $idUser = base64_decode($_POST['id_user']);
 
-$gq = "SELECT * FROM products WHERE product_id='$cartId'";
+$gq = "SELECT * FROM products WHERE product_id='$wishId'";
 $hasil = mysqli_query($conn, $gq);
 $baris = mysqli_fetch_assoc($hasil);
 $nama_barang = $baris["product_name"];

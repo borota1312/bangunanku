@@ -1,4 +1,6 @@
-<?php $page = "Product Single"; ?>
+<?php
+require 'config.php';
+$page = "Product Single"; ?>
 <!DOCTYPE html>
 <html lang="en">
 

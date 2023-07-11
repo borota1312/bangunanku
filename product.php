@@ -18,10 +18,12 @@ if ($page == "Shop") {
                         $rs_resultc = mysqli_query($conn, $queryc);
                         // echo $queryc;
                         while ($rowc = mysqli_fetch_array($rs_resultc)) {
-                            if (base64_decode($_GET['kategori']) == $rowc["category_id"]) {
-                                echo "<li><a class='active' href='shop.php?kategori=" . base64_encode($rowc["category_id"]) . "'>" . $rowc["category_name"] . "</a></li>";
-                            } else {
-                                echo "<li><a href='shop.php?kategori=" . base64_encode($rowc["category_id"]) . "'>" . $rowc["category_name"] . "</a></li>";
+                            if (isset($_GET['kategori'])) {
+                                if (base64_decode($_GET['kategori']) == $rowc["category_id"]) {
+                                    echo "<li><a class='active' href='shop.php?kategori=" . base64_encode($rowc["category_id"]) . "'>" . $rowc["category_name"] . "</a></li>";
+                                } else {
+                                    echo "<li><a href='shop.php?kategori=" . base64_encode($rowc["category_id"]) . "'>" . $rowc["category_name"] . "</a></li>";
+                                }
                             }
                         }
 
