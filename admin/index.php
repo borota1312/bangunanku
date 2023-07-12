@@ -79,25 +79,105 @@
                                         </div>
                                         <ul class="p-0 m-0">
                                             <?php
-                                            $query = "SELECT * FROM `products` LEFT JOIN product_images on product_images.product_id = products.product_id LEFT JOIN order_items on order_items.product_id = products.product_id ORDER BY products.product_id";
-                                            $rs_result = mysqli_query($conn, $query);
-                                            $no = 1;
-                                            while ($row = mysqli_fetch_array($rs_result)) {
+                                            $dataOrder = array();
+                                            $datacompare = array();
+                                            $datafinal = array();
+                                            $orderItems = "SELECT * FROM order_items ORDER BY `order_items`.`product_id` ASC";
+                                            $resultOrders = mysqli_query($conn, $orderItems);
+                                            $jumlahBarang = mysqli_num_rows($resultOrders);
+                                            for ($i = 0; $i < $jumlahBarang; $i++) {
+                                                $row = mysqli_fetch_assoc($resultOrders);
+                                                if ($i > 0) {
+                                                    $dataOrder[] = array(
+                                                        'id_produk' => $row['product_id'],
+                                                        'quantity' => $row['quantity'],
+                                                        'harga_satuan' => $row['price_per_unit'],
+                                                        'harga_total' => ($row['price_per_unit'] * $row['quantity']),
+                                                        'potongan_harga' => ($row['price_per_unit'] * $row['quantity'] * $row['discount_amount'] / 100)
+                                                    );
+                                                    $datacompare[] = array(
+                                                        'id_produk' => $row['product_id'],
+                                                        'quantity' => $row['quantity'],
+                                                        'harga_satuan' => $row['price_per_unit'],
+                                                        'harga_total' => ($row['price_per_unit'] * $row['quantity']),
+                                                        'potongan_harga' => ($row['price_per_unit'] * $row['quantity'] * $row['discount_amount'] / 100)
+                                                    );
+                                                } else {
+                                                    $dataOrder[] = array(
+                                                        'id_produk' => $row['product_id'],
+                                                        'quantity' => $row['quantity'],
+                                                        'harga_satuan' => $row['price_per_unit'],
+                                                        'harga_total' => ($row['price_per_unit'] * $row['quantity']),
+                                                        'potongan_harga' => ($row['price_per_unit'] * $row['quantity'] * $row['discount_amount'] / 100)
+                                                    );
+                                                }
+                                            }
+
+                                            for ($k = 0; $k < $jumlahBarang; $k++) {
+                                                if ($dataOrder[$k]['id_produk'] == $datacompare[$k]['id_produk']) {
+                                                    unset($dataOrder[($k + 1)]);
+                                                    $id = $dataOrder[$k]['id_produk'];
+                                                    $product = "SELECT * FROM products WHERE product_id=$id";
+                                                    $result = mysqli_query($conn, $product);
+                                                    $row = mysqli_fetch_assoc($result);
+                                                    $nama = $row['product_name'];
+                                                    $desc = $row['description'];
+
+                                                    $img = "SELECT * FROM product_images WHERE product_id=$id";
+                                                    $result2 = mysqli_query($conn, $img);
+                                                    $row2 = mysqli_fetch_assoc($result2);
+                                                    $image = $row2['image_url'];
+
+                                                    $datafinal[] = array(
+                                                        'id' => $id,
+                                                        'nama' => $nama,
+                                                        'desc' => $desc,
+                                                        'image' => $image,
+                                                        'quantity' => $dataOrder[$k]['quantity'] + $datacompare[$k]['quantity'],
+                                                        'harga_satuan' => $dataOrder[$k]['harga_satuan'],
+                                                        'harga_total' => $dataOrder[$k]['harga_total'] + $datacompare[$k]['harga_total'],
+                                                        'potongan_harga' => $dataOrder[$k]['potongan_harga'] + $datacompare[$k]['potongan_harga'],
+                                                    );
+                                                } else if ($dataOrder[$k]['id_produk'] != '') {
+                                                    $id = $dataOrder[$k]['id_produk'];
+                                                    $product = "SELECT * FROM products WHERE product_id=$id";
+                                                    $result = mysqli_query($conn, $product);
+                                                    $row = mysqli_fetch_assoc($result);
+                                                    $nama = $row['product_name'];
+                                                    $desc = $row['description'];
+
+                                                    $img = "SELECT * FROM product_images WHERE product_id=$id";
+                                                    $result2 = mysqli_query($conn, $img);
+                                                    $row2 = mysqli_fetch_assoc($result2);
+                                                    $image = $row2['image_url'];
+
+                                                    $datafinal[] = array(
+                                                        'id' => $id,
+                                                        'nama' => $nama,
+                                                        'desc' => $desc,
+                                                        'image' => $image,
+                                                        'quantity' => $dataOrder[$k]['quantity'],
+                                                        'harga_satuan' => $dataOrder[$k]['harga_satuan'],
+                                                        'harga_total' => $dataOrder[$k]['harga_total'],
+                                                        'potongan_harga' => $dataOrder[$k]['potongan_harga'],
+                                                    );
+                                                }
+                                            }
+                                            foreach ($datafinal as $row) {
                                             ?>
                                                 <li class="d-flex mb-4 pb-1">
                                                     <div class="avatar flex-shrink-0 me-3">
-                                                        <img class="avatar-initial rounded bg-label-success" src="backend/<?php echo $row["image_url"] ?>" alt="-">
+                                                        <img class="avatar-initial rounded bg-label-success" src="backend/<?php echo $row["image"] ?>" alt="-">
                                                     </div>
                                                     <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                                         <div class="me-2">
-                                                            <h6 class="mb-0"><?= $row["product_name"] ?></h6>
-                                                            <small class="text-muted"></small><?= $row['description'] ?></small>
+                                                            <h6 class="mb-0"><?= $row["nama"] ?></h6>
+                                                            <small class="text-muted"></small><?= $row['desc'] ?></small>
                                                         </div>
                                                         <div class="user-progress">
                                                             <?php
-                                                            $total = $row['price'] * $row['quantity'];
-                                                            $sum = $total * $row['discount_amount'];
-                                                            $sum = $total + $sum;
+                                                            $tax = 10 / 100 * $row["harga_total"];
+                                                            $sum = $row["harga_total"] - $row["potongan_harga"] + $tax;
                                                             ?>
                                                             <small class="fw-semibold">Rp<?= number_format($sum, 0, ',', '.'); ?></small>
                                                         </div>
@@ -169,14 +249,12 @@
             $datas[] = mysqli_num_rows($result);
         }
 
-        $orderItems = "SELECT * FROM order_items LEFT JOIN products on order_items.product_id = products.product_id ORDER BY products.product_id";
-        $resultOrders = mysqli_query($conn, $orderItems);
-        $dataOrder[] = $resultOrders;
-        var_dump($dataOrder);
+        // print_r($datafinal);
+        // var_dump($dataOrder);
         ?>
         <script>
-            var data = <?= json_encode($datas) ?>
-            var order = <?= json_encode($dataOrder) ?>
+            var data = <?= json_encode($datas) ?>;
+            var order = <?= json_encode($dataOrder) ?>;
             console.log(order)
         </script>
         <?php include('layouts/scripts.php') ?>
