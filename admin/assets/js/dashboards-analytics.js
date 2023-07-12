@@ -473,7 +473,7 @@
                 show: true,
                 fontSize: '0.8125rem',
                 color: axisColor,
-                label: 'Weekly',
+                label: 'Summary',
                 formatter: function (w) {
                   return '38%';
                 }
@@ -528,7 +528,7 @@
             seriesIndex: 0,
             dataPointIndex: 7,
             strokeColor: config.colors.primary,
-            strokeWidth: 2,
+            strokeWidth: 1,
             size: 6,
             radius: 8
           }
@@ -579,7 +579,7 @@
           show: false
         },
         min: 0,
-        max: 50,
+        max: 20,
         tickAmount: 4
       }
     };
